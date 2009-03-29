@@ -12,7 +12,7 @@ use warnings;
 use Algorithm::FastPermute;
 use Log::Log4perl qw(:easy);
 
-our $VERSION     = "0.01";
+our $VERSION     = "0.03";
 our $STOP_SOLVER = 0;
 
 ###########################################
@@ -83,11 +83,17 @@ sub solve {
         }
     } else {
         my @array = @{$self->{values}};
-        permute {
-            DEBUG "Permutation: @array";
-            @try{@{$self->{chars}}} = @array;
-            $self->tryout(\%try);
-        } @array;
+        eval {
+            permute {
+                DEBUG "Permutation: @array";
+                @try{@{$self->{chars}}} = @array;
+                $self->tryout(\%try);
+                die "STOP_SOLVER_SET" if $STOP_SOLVER;
+            } @array;
+        };
+        if($@ and $@ !~ /STOP_SOLVER_SET/) {
+            die "Error is '$@'";
+        }
     }
 
     return $self->{results};

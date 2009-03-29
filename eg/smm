@@ -14,7 +14,7 @@ Log::Log4perl->easy_init($INFO);
 
 use vars qw($CVSVERSION);
 
-$CVSVERSION = '$Revision: 1.1.1.1 $';
+$CVSVERSION = '$Revision: 1.3 $';
 
 getopts("hv", \my %opts);
 pod2usage() if $opts{h};
@@ -26,7 +26,9 @@ if($opts{v}) {
 my $solver = Games::Puzzles::SendMoreMoney->new(
         values    => [0..9],
         puzzle    => "SEND + MORE = MONEY",
-        reporter  => sub { print Dumper($_[0]) },
+        reporter  => sub { print Dumper($_[0]);
+                           $Games::Puzzles::SendMoreMoney::STOP_SOLVER = 1;
+                         },
         validator => sub { return 0 if $_[0]->{S} == 0;
                            return 0 if $_[0]->{M} == 0;
                            return 1; },
@@ -38,29 +40,23 @@ __END__
 
 =head1 NAME
 
-    smm - blah blah blah
+    smm - Calculate a solution for the SEND + MORE = MONEY puzzle
 
 =head1 SYNOPSIS
 
-    smm -xyz
-
-=head1 OPTIONS
-
-=over 8
-
-=item B<-x>
-
-Prints this manual page in text format.
+    smm
 
 =back
 
 =head1 DESCRIPTION
 
-smm blah blah blah.
+This sample script will calculate a solution for the
 
-=head1 EXAMPLES
+    SEND + MORE = MONEY
 
-  $ smm -x foo bar
+problem by permutating single-digit values for the letters used in the
+expression. It will arrive at a solution within a couple of seconds to
+minutes, depending on your CPU's speed.
 
 =head1 LEGALESE
 

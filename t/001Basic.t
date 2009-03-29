@@ -15,7 +15,7 @@ BEGIN { use_ok('Games::Puzzles::SendMoreMoney') };
 use Games::Puzzles::SendMoreMoney;
 
 my $solver = Games::Puzzles::SendMoreMoney->new(
-    values    => [0..2],
+    values    => [1,2],
     puzzle    => "A = B + 1",
     reporter  => sub { $Games::Puzzles::SendMoreMoney::STOP_SOLVER = 1; },
 );
